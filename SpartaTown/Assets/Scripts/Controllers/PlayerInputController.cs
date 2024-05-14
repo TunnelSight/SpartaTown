@@ -1,0 +1,33 @@
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerInputController : TopDownController
+{
+    private Camera camera;
+
+    private void Awake()
+    {
+        camera = Camera.main; // mainCamera 태그 붙어있는 카메라를 가져온다
+    }
+
+    public void OnMove(InputValue value)
+    {
+        Vector2 moveInput = value.Get<Vector2>().normalized; //크기가 1인 벡터로 만듬
+        CallMoveEvent(moveInput);
+        //실제 움직이는 처리는 PlayerMovement에서 하게 됨
+    }
+
+    public void OnLook(InputValue value)
+    {
+        Vector2 newAim = value.Get<Vector2>();
+        Vector2 worldPos = camera.ScreenToWorldPoint(newAim);
+        newAim = (worldPos - (Vector2)transform.position).normalized;
+
+        CallLookEvent(newAim);
+    }
+
+    public void OnFire(InputValue value)
+    {
+
+    }
+}
